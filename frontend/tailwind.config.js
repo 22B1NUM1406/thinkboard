@@ -9,8 +9,6 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [daisyui,],
-  daisyui:{
-    themes: ["forest","retro",],
-  },
+  plugins: [],
+ 
 }

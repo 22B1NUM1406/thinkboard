@@ -1,36 +1,25 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Home, ShoppingCart, Info } from 'lucide-react'
-
-const Navbar = () => {
-  return (
-    <header className='bg-gray-900 border-b-2 border-gray-700 sticky top-0 z-50'>
-      <div className='mx-auto max-w-7xl p-4'>
-        <div className='flex flex-col md:flex-row justify-between items-center gap-4'>
-          <Link to="/" className='flex items-center gap-3'>
-            <div className='text-4xl'>🎰</div>
-            <div>
-              <h1 className='text-2xl font-bold text-white tracking-tighter'>Lucky Draw</h1>
-              <p className='text-sm text-gray-400'>0-9 тооны сугалаа</p>
+const Navbar = ({ user }) => (
+  <nav className="bg-gradient-to-r from-purple-900 to-indigo-900 text-white shadow-lg">
+    <div className="container mx-auto px-6 py-4">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <Moon className="w-8 h-8" />
+          <span className="text-2xl font-bold">Таротын Мэргэ</span>
+        </div>
+        <div className="flex items-center gap-6">
+          <a href="#" className="hover:text-purple-300 transition">Нүүр</a>
+          <a href="#" className="hover:text-purple-300 transition">Тухай</a>
+          <a href="#" className="hover:text-purple-300 transition">Мэдээ</a>
+          <a href="#" className="hover:text-purple-300 transition">Блог</a>
+          <a href="#" className="hover:text-purple-300 transition">Холбоо барих</a>
+          {user && (
+            <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
+              <span className="text-2xl">{user.avatar}</span>
+              <span className="font-medium">{user.name}</span>
             </div>
-          </Link>
-          
-        
-          
-          <div className='flex gap-4'>
-            <Link to="/" className='btn btn-ghost text-white'>
-              <Home className='size-5'/>
-              <span>Нүүр</span>
-            </Link>
-            <Link to="/purchase" className='btn btn-primary'>
-              <ShoppingCart className='size-5'/>
-              <span>Сугалаа авах</span>
-            </Link>
-          </div>
+          )}
         </div>
       </div>
-    </header>
-  )
-}
-
-export default Navbar
+    </div>
+  </nav>
+);
