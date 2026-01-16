@@ -1,41 +1,49 @@
-import express, { json } from 'express';
-import noteRoutes from './routes/noteRoutes.js'
+import express from 'express';
+import ticketRoutes from './routes/ticketRoutes.js';
 import { connectDB } from './config/db.js';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
 
-dotenv.config();
-const PORT= process.env.PORT || 5001;
-const app= express();
-const __dirname=path.resolve();
-if(process.env.NODE_ENV!=="production"){
-  app.use(cors({
-  origin: "http://localhost:5173"
+const PORT = 5001;
+const app = express();
+const __dirname = path.resolve();
+
+// CORS
+app.use(cors({
+    origin: "http://localhost:5173"
 }));
-}
+
 app.use(express.json());
-app.use("/api/notes", noteRoutes);
 
-if(process.env.NODE_ENV==="production"){
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+// API маршрутууд
+app.use("/api/tickets", ticketRoutes);
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+// Test endpoint
+app.get('/api', (req, res) => {
+    res.json({ message: 'Сугалааны API сервер' });
 });
 
+// Production
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../frontend/dist")));
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+    });
 }
 
+// Алдаа
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: "Алдаа гарлаа" });
+});
+
+// Холболт
 try {
-  await connectDB();
-  app.listen(PORT, () => {
-    console.log("Server started on PORT:", PORT);
-  });
+    await connectDB();
+    app.listen(PORT, () => {
+        console.log(`🎰 Сугалааны сервер ${PORT} порт дээр ажиллаж байна`);
+    });
 } catch (err) {
-  console.error("DB connection failed", err);
-  process.exit(1);
+    console.error("❌ МонгоДБ холбогдоход алдаа:", err);
+    process.exit(1);
 }
-
-
-
-
